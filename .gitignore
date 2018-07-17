@@ -6,13 +6,10 @@
 /src/.vs/BotQQClient/v15
 *.dll
 /src/BotBackendService/obj/Debug
-/src/BotBackendService/Properties/AssemblyInfo.cs
 /src/BotBackendService/bin/Debug
 /src/BotQQClient/obj/Debug
-/src/BotQQClient/Properties/AssemblyInfo.cs
 /src/BotQQClient.ConsoleDemo/bin/Debug
 /src/BotQQClient.ConsoleDemo/obj/Debug
-/src/BotQQClient.ConsoleDemo/Properties
 /src/packages/Newtonsoft.Json.6.0.8
 /src/packages
 /src/BotQQClient/bin/Debug/BotQQClient.pdb
