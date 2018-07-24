@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BotBackendService;
+using BotQQClient.Models;
 using BotQQClient.Models.Utilities;
+using Microsoft.Bot.Connector.DirectLine;
 
 namespace BotQQClient.ConsoleDemo
 {
@@ -20,20 +23,20 @@ namespace BotQQClient.ConsoleDemo
                     var messages = client.Poll().ToList();
 
                     var catchedMsgs = messages.Where(msg => !string.IsNullOrEmpty(msg.Content) &&
-                                                 msg.Content.Contains("@CDN") &&
-                                                     msg.Type == Models.Message.SourceType.Group)
+                                                 msg.Content.Contains("@Azure CDN助手") &&
+                                                     msg.Type == Message.SourceType.Group)
                                                         .ToList();
                     if (catchedMsgs.Any())
                     {
-                        catchedMsgs.GroupBy(msg => msg.SourceId)
+                        catchedMsgs.GroupBy(msg => msg.SenderId)
                             .ToList()
                             .ForEach(msgGroup =>
                         {
                             var group = client.Groups.FirstOrDefault(grp => grp.Value.Id == msgGroup.Key);
                             var contents = msgGroup.Select(m => m.Content).ToList();
-
-                            botBackendClient.StartBotConversation(contents,retMsg => group.Value.Message(retMsg))
-                                            .Wait();
+                            MockBotClient.StartBotConversation(contents, group.Value);
+                            //botBackendClient.StartBotConversation(contents, act => BotActivityHandler(act, group.Value))
+                            //                .Wait();
                         });
                     }
                 }
@@ -43,5 +46,11 @@ namespace BotQQClient.ConsoleDemo
                 }
             }
         }
+
+        static void BotActivityHandler(Activity act, Group qqGroup)
+        {
+            //qqGroup.Message(act.Text);
+            throw new NotImplementedException();
+        } 
     }
 }

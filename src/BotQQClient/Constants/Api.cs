@@ -45,6 +45,10 @@ namespace BotQQClient.Constants
             "https://s.web2.qq.com/api/get_group_info_ext2?gcode={0}&vfwebqq={1}&t=0.1",
             "https://s.web2.qq.com/proxy.html?v=20130916001&callback=1&id=1");
 
+        public static readonly ApiUrl GetFriendStatus = new ApiUrl(
+           "https://d1.web2.qq.com/channel/get_online_buddies2?vfwebqq={0}&clientid=53999199&psessionid={1}&t=0.1",
+           "https://d1.web2.qq.com/proxy.html?v=20151105001&callback=1&id=2");
+
         /// <summary>
         /// The response after QR verified looks like ptuiCB ('66','0','','0','http://ptlogin4.web2.qq.com/check_sig?xxxxxx','')
         /// Use this regex to match the URL part.

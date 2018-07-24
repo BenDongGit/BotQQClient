@@ -13,7 +13,7 @@ namespace BotBackendService
         private static readonly string BotAppId = "MS_China_CDN_Hackthon";
         private static readonly string ChannelName = "AzureChinaCDN";
 
-        public async Task StartBotConversation(IEnumerable<string> inputMsgs, Action<string> activityCallback)
+        public async Task StartBotConversation(IEnumerable<string> inputMsgs, Action<Activity> activityCallback)
         {
             var client = new DirectLineClient(BotAppSecret);
             var conversation = await client.Conversations.StartConversationAsync();
@@ -46,7 +46,7 @@ namespace BotBackendService
             }
         }
 
-        private static async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId, Action<string> activityCallback)
+        private static async Task ReadBotMessagesAsync(DirectLineClient client, string conversationId, Action<Activity> activityCallback)
         {
             while (true)
             {
@@ -56,7 +56,7 @@ namespace BotBackendService
                 activitySet.Activities
                    .Where(act => act.From.Id == BotAppId)
                        .ToList()
-                           .ForEach(act=> activityCallback(act.Text));
+                           .ForEach(act=> activityCallback(act));
             }
         }
     }

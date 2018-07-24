@@ -40,6 +40,7 @@ namespace BotQQClient
             {
                 session = value;
                 RestClient.CookieContainer = value.Cookies;
+                RestClient.Get(Api.GetFriendStatus, value.Tokens.Vfwebqq, value.Tokens.PsessionId);
             }
         }
 
@@ -77,12 +78,12 @@ namespace BotQQClient
                 }
             }
 
-            Session Authenticate()
+            Session QrAuthenticate()
             {
-                var session = QrAuthenticate(bytes =>
+                var session = BotQQClient.QrAuthenticate((byte[] bytes) =>
                 {
-                    File.WriteAllBytes("qrcode", bytes);
-                    Process.Start("qrcode");
+                    File.WriteAllBytes(@"qrcode", bytes);
+                    Process.Start(@"qrcode");
                     statusPrinter.Print("Waiting for authentication...");
                 }, maxAttemps);
 
@@ -96,15 +97,15 @@ namespace BotQQClient
 
             try
             {
-                Session = File.Exists(Miscellaneous.BotQQTempPath) ? ReadSession() : Authenticate();
-
+                Session = File.Exists(Miscellaneous.BotQQTempPath) ? ReadSession() : QrAuthenticate();
+                //Session = QrAuthenticate();
                 Groups = GetGroupsList(Session);
                 Groups.ToList().ForEach(gp => gp.Value.Client = this);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-                Authenticate();
+                QrAuthenticate();
             }
 
             Console.WriteLine("Logged in!");
@@ -118,10 +119,10 @@ namespace BotQQClient
                 CookieContainer = new CookieContainer()
             };
 
-            client.AddHandler("text/plain", new JsonDeserializer());
+            client.AddHandler(@"text/plain", new JsonDeserializer());
 
             var qrResponse = client.Get(Api.GetQrCode);
-            var qrsig = qrResponse.Cookies.First(x => x.Name == "qrsig").Value;
+            var qrsig = qrResponse.Cookies.First(x => x.Name == @"qrsig").Value;
             var ptqrtoken = Hash33(qrsig);
 
             imageCallback(qrResponse.RawBytes);
@@ -171,10 +172,10 @@ namespace BotQQClient
             var uinPsessionidResponse = client.Post<UinPsessionidResponse>(Api.GetUinAndPsessionid,
                 new JsonObject
                 {
-                    {"ptwebqq", ptwebqq },
-                    {"clientid", Miscellaneous.ClientId },
-                    {"psessionid", "" },
-                    {"status", "online" }
+                    {@"ptwebqq", ptwebqq },
+                    {@"clientid", Miscellaneous.ClientId },
+                    {@"psessionid", @"" },
+                    {@"status", @"online" }
                 });
 
             var uin = uinPsessionidResponse.Data.Result.Uin;
@@ -189,8 +190,8 @@ namespace BotQQClient
 
             var groupsResponse = RestClient.Post<GroupsResponse>(Api.GetGroupList, new JsonObject
                 {
-                    {"vfwebqq", session.Tokens.Vfwebqq},
-                    {"hash", hash}
+                    {@"vfwebqq", session.Tokens.Vfwebqq},
+                    {@"hash", hash}
                 }).Data.Result;
 
             return groupsResponse.GroupList.ToDictionary(x => x.Id);
@@ -212,7 +213,7 @@ namespace BotQQClient
             var n = new int[4];
             for (var T = 0; T < ptwebqq.Length; T++)
                 n[T % 4] ^= ptwebqq[T];
-            string[] u = { "EC", "OK" };
+            string[] u = { @"EC", @"OK" };
             var v = new long[4];
             v[0] = ((uin >> 24) & 255) ^ u[0][0];
             v[1] = ((uin >> 16) & 255) ^ u[0][1];
