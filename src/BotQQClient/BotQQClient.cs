@@ -17,7 +17,7 @@ using RestSharp.Deserializers;
 using SimpleJson;
 
 /// <summary>
-/// The bot client
+/// The bot QQ client
 /// </summary>
 namespace BotQQClient
 {
@@ -82,8 +82,8 @@ namespace BotQQClient
             {
                 var session = BotQQClient.QrAuthenticate((byte[] bytes) =>
                 {
-                    File.WriteAllBytes(@"qrcode", bytes);
-                    Process.Start(@"qrcode");
+                    File.WriteAllBytes(@"qr", bytes);
+                    Process.Start(@"qr");
                     statusPrinter.Print("Waiting for authentication...");
                 }, maxAttemps);
 
@@ -102,7 +102,7 @@ namespace BotQQClient
                 Groups = GetGroupsList(Session);
                 Groups.ToList().ForEach(gp => gp.Value.Client = this);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 QrAuthenticate();
             }

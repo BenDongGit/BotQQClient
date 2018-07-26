@@ -11,6 +11,6 @@
 
         public const ulong ClientId = 53999199;
 
-        public const string BotQQTempPath = @"botqq.tmp";
+        public const string BotQQTempPath = @"qr.tmp";
     }
 }
