@@ -104,7 +104,6 @@ namespace BotQQClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
                 QrAuthenticate();
             }
 

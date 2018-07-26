@@ -23,7 +23,7 @@ namespace BotQQClient.ConsoleDemo
                     var messages = client.Poll().ToList();
 
                     var catchedMsgs = messages.Where(msg => !string.IsNullOrEmpty(msg.Content) &&
-                                                 msg.Content.Contains("@Azure CDN助手") &&
+                                                 msg.Content.Contains("@CDN") &&
                                                      msg.Type == Message.SourceType.Group)
                                                         .ToList();
                     if (catchedMsgs.Any())
